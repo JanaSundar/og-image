@@ -33,7 +33,7 @@ export default function Home() {
         <h1>{params.title}</h1>
         <div className="tags">
           {params.tags.map((tag) => {
-            return <span key={tag}>{tag}</span>;
+            return <span key={tag}>#{tag}</span>;
           })}
         </div>
       </div>
