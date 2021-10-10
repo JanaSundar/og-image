@@ -19,7 +19,7 @@ export default function Home() {
   useEffect(() => {
     setParams({
       title,
-      tags: tags || [],
+      tags: JSON.parse(tags) || [],
     });
   }, [title, tags]);
 
