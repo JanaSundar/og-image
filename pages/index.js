@@ -13,13 +13,13 @@ export default function Home() {
 
   const [params, setParams] = useState({
     title: null,
-    tags: [],
+    tags: null || '',
   });
 
   useEffect(() => {
     setParams({
       title,
-      tags: JSON.parse(tags) || [],
+      tags: tags || '',
     });
   }, [title, tags]);
 
@@ -32,7 +32,7 @@ export default function Home() {
       <div className="content">
         <h1>{params.title}</h1>
         <div className="tags">
-          {params.tags.map((tag) => {
+          {params.tags.split(',').map((tag) => {
             return <span key={tag}>#{tag}</span>;
           })}
         </div>
