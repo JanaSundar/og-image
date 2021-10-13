@@ -1,15 +1,7 @@
-import { readFileSync } from 'fs';
-import path from 'path';
-
-
-const imagePath = path.resolve(process.cwd(), 'public');
-const image = readFileSync(`${imagePath}/logo.svg`).toString('base64');
-const background = readFileSync(`${imagePath}/ogbackground.svg`).toString('base64')
-
-
+import { getAbsoluteURL } from './getAbsoluteUrl';
 
 const getCss = () => {
-    return `
+  return `
     @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
 
     * {
@@ -22,7 +14,7 @@ const getCss = () => {
     }
 
     .container {
-    background: url(data:image/svg+xml;base64,${background});
+    background: url(${getAbsoluteURL(`/ogbackground.svg`)});
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -65,9 +57,7 @@ const getCss = () => {
     opacity: 0.7;
     }
     `;
-}
-
-
+};
 
 export const getContent = (tags, title, handle, logo) => {
   return `
@@ -96,7 +86,7 @@ export const getContent = (tags, title, handle, logo) => {
             </div>
         </div>
         <div class="logo">
-            <img src="${logo ?? `data:image/svg+xml;base64,${image}`}" alt="logo" width="100px" height="100px" >
+            <img src="${logo ?? getAbsoluteURL(`/logo.svg`)}" alt="logo" width="100px" height="100px" >
             <div class="handle">${handle ?? '@Jana__Sundar'}</div>
         </div>
         </div>

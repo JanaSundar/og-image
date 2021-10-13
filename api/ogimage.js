@@ -1,6 +1,6 @@
 import chalk from 'chalk';
-import { getContent } from '../../utils/getContent';
-import { getPage } from '../../utils/getPage';
+import { getContent } from '../utils/getContent';
+import { getPage } from '../utils/getPage';
 
 export default async function handler(req, res) {
   console.info(chalk.cyan('info'), ` - Generating Opengraph images`);

@@ -1,5 +1,4 @@
-import { chromium as Playwright } from 'playwright-core';
-import chrome from 'chrome-aws-lambda';
+import Playwright from 'playwright-aws-lambda';
 
 let page;
 
@@ -37,7 +36,7 @@ export const getPage = async () => {
   };
 
   const options = await getOptions();
-  page = await Playwright.launch({
+  page = await Playwright.launchChromium({
     ...options,
   });
 
