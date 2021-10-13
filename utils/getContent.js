@@ -18,8 +18,7 @@ export const getCss = (fontFamily, fontFamilyUrl, fontSize, background) => {
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-    width: 1200px;
-    height: 630px;
+    height: 100vh;
     display: flex;
     justify-content: center;
     flex-direction: column;
