@@ -1,13 +1,14 @@
 import chalk from 'chalk';
-import { getContent } from '../../utils/getContent';
+import { getContent, getCss } from '../../utils/getContent';
 import { getPage } from '../../utils/getPage';
 
 export default async function handler(req, res) {
   console.info(chalk.cyan('info'), ` - Generating Opengraph images`);
 
-  const { title, tags, handle, logo, w, h, debug } = req.query;
+  const { title, tags, handle, logo, debug, fontFamily, fontSize, background, fontFamilyUrl } = req.query;
 
-  const html = getContent(tags, title, handle, logo);
+  const css = getCss(fontFamily, fontFamilyUrl, fontSize, background);
+  const html = getContent(tags, title, handle, logo, css);
 
   if (debug === 'true') {
     res.setHeader('Content-Type', 'text/html');
@@ -17,7 +18,7 @@ export default async function handler(req, res) {
 
   try {
     const page = await getPage();
-    await page.setViewport({ width: w ?? 1200, height: h ?? 630 });
+    await page.setViewport({ width: 1200, height: 630 });
     await page.setContent(html, { waitUntil: 'networkidle2', timeout: 15000 });
 
     const buffer = await page.screenshot({ type: 'png' });
