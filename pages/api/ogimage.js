@@ -18,7 +18,7 @@ export default async function handler(req, res) {
 
   try {
     const page = await getPage();
-    await page.setViewport({ width: 2048, height: 1170 });
+    await page.setViewport({ width: 1200, height: 630 });
     await page.setContent(html, { waitUntil: 'networkidle2', timeout: 15000 });
 
     const buffer = await page.screenshot({ type: 'png' });
