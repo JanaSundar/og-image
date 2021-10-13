@@ -23,7 +23,7 @@ export const getCss = (fontFamily, fontFamilyUrl, fontSize, background) => {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    padding: 2rem;
+    padding: 3.5rem;
     }
 
     .content {
