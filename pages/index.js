@@ -1,46 +1,50 @@
-/* eslint-disable @next/next/no-page-custom-font */
-import { useRouter } from 'next/dist/client/router';
+import { useRouter } from 'next/router';
 import Head from 'next/head';
-import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { getRandomColor } from '../utils/getRandomColors';
 
 export default function Home() {
   const router = useRouter();
   const searchParams = new URLSearchParams(router.asPath.split(/\?/)[1]);
 
   const title = searchParams.get('title');
-  const tags = searchParams.get('tags');
+  const background = searchParams.get('background');
+  const color = searchParams.get('color');
 
-  const [params, setParams] = useState({
+  const [params, setParams] = React.useState({
     title: null,
-    tags: null || '',
+    color: null,
+    background: null,
   });
 
-  useEffect(() => {
+  React.useEffect(() => {
     setParams({
       title,
-      tags: tags || '',
+      color,
+      background,
     });
-  }, [title, tags]);
+  }, [title, color, background]);
 
   return (
-    <div className={'container'}>
+    <>
       <Head>
         <title>JanaSundar</title>
       </Head>
 
-      <div className="content">
-        <h1>{params.title}</h1>
-        <div className="tags">
-          {params.tags.split(',').map((tag) => {
-            return <span key={tag}>#{tag}</span>;
-          })}
-        </div>
+      <div
+        className={`w-[1200px] h-[630px] flex justify-center items-center`}
+        style={{
+          background: params.background ?? '#121212',
+        }}>
+        <h1
+          className={`font-sans text-6xl leading-normal tracking-wide font-bold text-center w-9/12
+          bg-clip-text text-transparent gradient-text`}
+          style={{
+            background: getRandomColor(),
+          }}>
+          {params.title}
+        </h1>
       </div>
-      <div className="logo">
-        <Image src="/logo.svg" alt="logo" width="100%" height="100%" />
-        <div className="handle">@Jana__Sundar</div>
-      </div>
-    </div>
+    </>
   );
 }
