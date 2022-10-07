@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { getRandomColor } from '../utils/getRandomColors';
 
 export default function Home() {
@@ -40,7 +40,7 @@ export default function Home() {
           className={`font-sans text-6xl leading-normal tracking-wide font-bold text-center w-9/12
           bg-clip-text text-transparent gradient-text`}
           style={{
-            background: getRandomColor(),
+            background: params.color ?? getRandomColor(),
           }}>
           {params.title}
         </h1>
