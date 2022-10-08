@@ -1,37 +1,37 @@
+import playwright from 'playwright-core';
 import chromium from 'chrome-aws-lambda';
-import puppeteer from 'puppeteer-core';
+
+const exePath =
+  process.platform === 'win32'
+    ? 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'
+    : process.platform === 'linux'
+    ? '/usr/bin/google-chrome'
+    : '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+
+const getOptions = async () => {
+  let options;
+  if (isDev) {
+    options = {
+      args: [],
+      executablePath: exePath,
+      headless: true,
+    };
+  } else {
+    options = {
+      args: chromium.args,
+      executablePath: await chromium.executablePath,
+      headless: chromium.headless,
+    };
+  }
+
+  return options;
+};
 
 export default async function handler(req, res) {
   try {
     const { title, color, background } = req.query;
-
     const isDev = process.env.NODE_ENV === 'development';
-    const exePath =
-      process.platform === 'win32'
-        ? 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'
-        : process.platform === 'linux'
-        ? '/usr/bin/google-chrome'
-        : '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
-    const baseUrl = isDev ? 'http://localhost:3001' : 'http://og-image.janasundar.dev';
-
-    const getOptions = async () => {
-      let options;
-      if (isDev) {
-        options = {
-          args: [],
-          executablePath: exePath,
-          headless: true,
-        };
-      } else {
-        options = {
-          args: chromium.args,
-          executablePath: await chromium.executablePath,
-          headless: chromium.headless,
-        };
-      }
-
-      return options;
-    };
+    const baseUrl = isDev ? 'http://localhost:3000' : `https://${process.env.VERCEL_URL}`;
 
     const qs = new URLSearchParams({
       title,
@@ -41,12 +41,14 @@ export default async function handler(req, res) {
     const url = `${baseUrl}?${qs.toString()}`;
     const options = await getOptions();
 
-    const browser = await puppeteer.launch({
+    const browser = await playwright.chromium.launch({
       ...options,
     });
     const page = await browser.newPage();
-    await page.setViewport({ width: 1200, height: 630 });
-    await page.goto(url, { waitUntil: 'networkidle2' });
+    await page.setViewportSize({ width: 1200, height: 630 });
+    await page.goto(url, {
+      timeout: 15 * 1000,
+    });
     const buffer = await page.screenshot({ type: 'png' });
     await browser.close();
 
