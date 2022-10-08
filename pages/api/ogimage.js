@@ -1,4 +1,4 @@
-import playwright from 'playwright-core';
+import puppeteer from 'puppeteer-core';
 import chromium from 'chrome-aws-lambda';
 
 const exePath =
@@ -41,14 +41,15 @@ export default async function handler(req, res) {
     const url = `${baseUrl}?${qs.toString()}`;
     const options = await getOptions();
 
-    const browser = await playwright.chromium.launch({
+    const browser = await puppeteer.launch({
       ...options,
     });
     const page = await browser.newPage();
-    await page.setViewportSize({ width: 1200, height: 630 });
+    await page.setViewport({ width: 1200, height: 630 });
     await page.goto(url, {
-      timeout: 15 * 1000,
+      waitUntil: 'domcontentloaded',
     });
+    await page.evaluateHandle('document.fonts.ready')
     const buffer = await page.screenshot({ type: 'png' });
     await browser.close();
 
