@@ -8,7 +8,7 @@ const exePath =
     ? '/usr/bin/google-chrome'
     : '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 
-const getOptions = async () => {
+const getOptions = async (isDev) => {
   let options;
   if (isDev) {
     options = {
@@ -39,7 +39,7 @@ export default async function handler(req, res) {
       background,
     });
     const url = `${baseUrl}?${qs.toString()}`;
-    const options = await getOptions();
+    const options = await getOptions(isDev);
 
     const browser = await puppeteer.launch({
       ...options,
